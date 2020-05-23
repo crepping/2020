@@ -2,6 +2,7 @@
 <html lang="en">
 <?PHP
 include('funciones/funciones.php');
+$cnn=Conectar();
 session_start();
 if(!isset($_SESSION['$id_login'])){
   session_destroy();
@@ -30,11 +31,12 @@ if(!isset($_SESSION['$id_login'])){
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src=" https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="js/JsBarcode.all.min.js"></script>
+    <script src="js/jquery-code-scanner.js"></script>
 <style>
     .container{padding: 20px;}
     .cart-link{width: 100%;text-align: right;display: block;font-size: 22px;}
-    </style>
-        
+    </style> 
 </head>
   
 
@@ -131,34 +133,65 @@ if(!isset($_SESSION['$id_login'])){
 					   <div class="panel-body">
 						  <div class="col-md-12">
 							<div class="form-1-2">
-                            <form>
+                            <form method="POST">
   <div class="form-row">
     <div class="form-group col-md-6">
       <label for="inputEmail4">Codigo</label>
-      <input type="text" class="form-control" id="inputEmail4" autofocus="autofocus" value="" onkeyup="Lector(this.value);">
+      <input type="text" class="form-control" name="cod"  id="code-scan" autocomplete="off" onkeyup="Lector(code);" required>
     </div>
     <div class="form-group col-md-6">
       <label for="inputPassword4">Nombre</label>
-      <input type="text" class="form-control" id="inputPassword4" placeholder="Nombre producto">
+      <input type="text" class="form-control" id="inputPassword4" name="nomb" placeholder="Nombre producto" required>
     </div>
   </div>
   <div class="form-group">
     <label for="inputAddress">Descripcion</label>
-    <input type="text" class="form-control" id="inputAddress" placeholder="Descripcion Categoria">
+    <input type="text" class="form-control" id="inputAddress" name="Des" placeholder="Descripcion Categoria" required>
   </div>
   <div class="form-group">
     <label for="inputAddress2">Precio</label>
-    <input type="text" class="form-control" id="inputAddress2" placeholder="Precio Total">
+    <input type="text" class="form-control" id="inputAddress2" name="precio" required placeholder="Precio Total" required>
   </div>
   <div class="form-row">
     <div class="form-group col-md-6">
       <label for="inputCity">Stock</label>
-      <input type="num" class="form-control" id="inputCity" placeholder="Stock Total">
+      <input type="num" class="form-control" id="inputCity" name="stock" placeholder="Stock Total" required>
     </div>
   </div>
   
-  <button type="submit" class="btn btn-primary">Sign in</button>
+  <button type="submit" name="aceptar" value="Ingresar Reserva" class="btn btn-primary">Ingresar Cliente</button>  
+
 </form>
+<?php
+  //error_reporting(0);
+  if($_POST['aceptar']=="Ingresar Reserva"){
+
+    $codigo = $_POST['cod'];
+    $nom = $_POST['nomb'];
+    $des = $_POST['Des'];
+    $pre = $_POST['precio'];
+    $stock =$_POST['stock'];
+    $hoy = date("Y-m-d H:i:s");
+    
+    $ver ="SELECT * FROM mis_productos WHERE Barra ='$codigo' ";
+    $busqueda= mysqli_query($cnn,$ver);
+    if(mysqli_num_rows($busqueda)>0) { 
+       echo"<br>"."<br>";
+    echo"<script>alert('El producto ya Existe')</script>";
+    } else {
+    $in="insert into mis_productos(Barra,name,description,price,Stock,created) values ('$codigo','$nom','$des','$pre','$stock','$hoy')";   
+    $dato=mysqli_query($cnn,$in); 
+    if (!$dato) {
+    echo"<br>"."<br>";
+      echo"<script>alert('Error de ingresar producto')</script>";
+    }else{
+    echo"<br>"."<br>";
+   echo"<script>alert('Producto Ingreso')</script>";
+  //echo"<script type='text/javascript'>window.location='alumnotodos.php'</script>";
+    }
+}
+   }
+  ?>
                             </div>
                           </div>
                         </div>
@@ -233,7 +266,7 @@ if(!isset($_SESSION['$id_login'])){
   <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
   <!-- Page level plugin JavaScript-->
-   
+    
     <script src="vendor/datatables/dataTables.bootstrap4.js"></script>
     <script src="vendor/datatables/buttons.print.min.js"></script>
     <script src="vendor/datatables/dataTables.buttons.min.js"></script>
@@ -242,19 +275,24 @@ if(!isset($_SESSION['$id_login'])){
     <script src="vendor/datatables/buttons.html5.min.js"></script>
     <script src="vendor/datatables/jszip.min.js"></script>
     <script src="vendor/datatables/buttons.colVis.min.js"></script>
-      <script>
-          function Lector(n){
-   var x=20; //cantidad de caracteres que devuelve el lector
-   if(n.length == x) {
-      //aca va la logica 
-   }
-}
-      </script>
-
-
-
   <!-- Custom scripts for all pages-->
-  
+  <script>
+  function Lector(barcode){
+    $(document).ready(function() { 
+      var barcode=""; 
+      $(document).keydown(function(e) { 
+        var code = (e.keyCode ? e.keyCode : e.which); 
+        if(code==13){ 
+          //alert(barcode); 
+          } else if(code==9){ 
+            //alert(barcode); 
+            } else { 
+              barcode=barcode+String.fromCharCode(code);
+               } 
+              }); 
+          }); 
+  }
+</script>
 
   <!-- Demo scripts for this page-->
   <script>
