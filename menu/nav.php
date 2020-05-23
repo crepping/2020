@@ -67,8 +67,8 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="pagina6">
           <h6 class="dropdown-header">Proveedores :</h6>
-          <a class="dropdown-item" href="IngresoCliente.php">Agregar Proveedor</a>
-          <a class="dropdown-item" href="listaclientes.php">Listado Proveedores</a>
+          <a class="dropdown-item" href="Ingresoproveedor.php">Agregar Proveedor</a>
+          <a class="dropdown-item" href="listadoproveedores.php">Listado Proveedores</a>
         </div>
       </li>
      <li class="nav-item dropdown">
