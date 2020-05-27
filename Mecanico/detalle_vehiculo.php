@@ -126,36 +126,33 @@ $rs = mysqli_query($cnn,$sql);
 
    <textarea name="detalle" rows="6" cols="100" placeholder="Detalles"></textarea>
     <br>
-    <button type="submit" name="aceptar" value="Ingresar" class="btn btn-primary">Ingresar Cliente</button>
+    <button type="submit" name="aceptar" value="Ingresar Detalle" class="btn btn-primary">Ingresar Detalle</button>
+    <?php   
+    echo $cliente ;
+    ?>
+    <br>
+    <?php
+    echo $cod;
+    
+    ?>
   </form>
 </form>
     <?php  
-     error_reporting(0);
-    if($_POST['aceptar']=="Ingresar Reserva"){
-     
-    $cod=$cod;
-    $car=$_POST['car'];
-    $fecha=$_POST['fechacita'];
-    $hora=$_POST['horario'];
+     //error_reporting(0);
+    if($_POST['aceptar']=="Ingresar Detalle"){
+    $session = $_SESSION['$id_login'];
+    $detalle=$_POST['detalle'];
     $hoy = date("Y-m-d H:i:s");
-    $ver ="SELECT * FROM reserva WHERE fecha_reserv='$fecha' and Hora='$hora' and estado_reserva = 0";
-    $busqueda= mysqli_query($cnn,$ver);
-    if(mysqli_num_rows($busqueda)>0) { 
-       echo"<br>"."<br>";
-    echo"<script>alert('La Reserva Ya existe')</script>";
-      
-    } else {
-    $in="insert into reserva(id_cliente,id_vehiculo,fecha_reserv,Hora,ingreso_fecha) values ('$cod','$car','$fecha','$hora','$hoy')";   
+    $in="insert into detalle(id,id_vehiculo,detalle,fecha_detalle) values ('$session','$cod','$detalle','$hoy')";   
     $dato=mysqli_query($cnn,$in); 
     if (!$dato) {
     echo"<br>"."<br>";
-      echo"<script>alert('Error de Reserva')</script>";
+      echo"<script>alert('Error de ingreso Detalle')</script>";
     }else{
     echo"<br>"."<br>";
-   echo"<script>alert('Reserva Agendada')</script>";
+   echo"<script>alert('Detalle Ingresado')</script>";
   //echo"<script type='text/javascript'>window.location='alumnotodos.php'</script>";
     }
-}
 }
 ?>
                             </div>

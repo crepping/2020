@@ -165,7 +165,7 @@ $rs = mysqli_query($cnn,$sql);
     $fecha=$_POST['fechacita'];
     $hora=$_POST['horario'];
     $hoy = date("Y-m-d H:i:s");
-    $ver ="SELECT * FROM reserva WHERE fecha_reserv='$fecha' and Hora='$hora' and estado_reserva = 0";
+    $ver ="SELECT * FROM reserva WHERE fecha_reserv='$fecha' and Hora='$hora'";
     $busqueda= mysqli_query($cnn,$ver);
     if(mysqli_num_rows($busqueda)>0) { 
        echo"<br>"."<br>";
